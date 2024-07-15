@@ -14,6 +14,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.anonymous.RoadRunner",
+      "config": {
+        "googleMapsApiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+      },
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "This app uses your location to track your activities.",
         "NSLocationAlwaysUsageDescription": "This app needs access to your location to track your activities even when the app is in the background.",
@@ -26,6 +29,11 @@
         "ACCESS_COARSE_LOCATION",
         "ACCESS_BACKGROUND_LOCATION"
       ],
+      "config": {
+        "googleMaps": {
+          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+        }
+      },
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -33,11 +41,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "extra": {
-      "eas": {
-        "projectId": "f7f0f18c-6308-4240-914d-697b68e5edd4"
-      }
     }
   }
 }

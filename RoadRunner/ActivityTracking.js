@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Dimensions } from 'react-native';
+import MapView, { Marker, Polyline } from 'react-native-maps';
 import * as Location from 'expo-location';
+
+const { width, height } = Dimensions.get('window');
+const ASPECT_RATIO = width / height;
+const LATITUDE_DELTA = 0.0922;
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
 
 const ActivityTracking = () => {
   const [location, setLocation] = useState(null);
@@ -8,6 +14,7 @@ const ActivityTracking = () => {
   const [errorMsg, setErrorMsg] = useState(null);
   const [startTime, setStartTime] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(null);
+  const [trail, setTrail] = useState([]);
 
   useEffect(() => {
     (async () => {
@@ -50,11 +57,51 @@ const ActivityTracking = () => {
     setTracking(false);
   };
 
+  useEffect(() => {
+    const subscription = Location.watchPositionAsync(
+      {
+        accuracy: Location.Accuracy.High,
+        timeInterval: 10000,
+        distanceInterval: 10,
+      },
+      (newLocation) => {
+        setLocation(newLocation);
+        setTrail((currentTrail) => [
+          ...currentTrail,
+          {
+            latitude: newLocation.coords.latitude,
+            longitude: newLocation.coords.longitude,
+          },
+        ]);
+      }
+    );
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
   return (
     <View style={styles.container}>
       {errorMsg ? <Text>{errorMsg}</Text> : null}
       {location ? (
-        <Text>Latitude: {location.coords.latitude}, Longitude: {location.coords.longitude}</Text>
+        <MapView
+          style={styles.map}
+          initialRegion={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: LATITUDE_DELTA,
+            longitudeDelta: LONGITUDE_DELTA,
+          }}
+        >
+          <Marker
+            coordinate={{
+              latitude: location.coords.latitude,
+              longitude: location.coords.longitude,
+            }}
+          />
+          <Polyline coordinates={trail} strokeWidth={5} strokeColor="red" />
+        </MapView>
       ) : (
         <Text>Fetching location...</Text>
       )}
@@ -70,7 +117,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
+    alignItems: 'center',
+  },
+  map: {
+    width: Dimensions.get('window').width,
+    height: Dimensions.get('window').height,
   },
 });
 
