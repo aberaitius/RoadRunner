@@ -13,9 +13,19 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.anonymous.RoadRunner"
+      "bundleIdentifier": "com.anonymous.RoadRunner",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "This app uses your location to track your activities.",
+        "NSLocationAlwaysUsageDescription": "This app needs access to your location to track your activities even when the app is in the background.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Allow RoadRunner to access your location at all times"
+      }
     },
     "android": {
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "ACCESS_BACKGROUND_LOCATION"
+      ],
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
@@ -23,6 +33,11 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f7f0f18c-6308-4240-914d-697b68e5edd4"
+      }
     }
   }
 }

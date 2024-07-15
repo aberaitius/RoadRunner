@@ -1,48 +1,57 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, Text } from 'react-native';
-import { auth } from './firebase';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
 
-const AuthScreen = () => {
-  const [email, setEmail] = useState('');
+const AuthScreen = ({ navigation }) => {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
-  const handleSignUp = () => {
-    auth.createUserWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        console.log('User signed up:', userCredential.user);
-      })
-      .catch(error => {
-        console.error('Error signing up:', error);
-      });
-  };
+  const [error, setError] = useState('');
 
   const handleLogin = () => {
-    auth.signInWithEmailAndPassword(email, password)
-      .then(userCredential => {
-        console.log('User logged in:', userCredential.user);
-      })
-      .catch(error => {
-        console.error('Error logging in:', error);
-      });
+    if (username === 'abes' && password === 'password123') {
+      navigation.navigate('Track');
+    } else {
+      setError('Invalid username or password');
+    }
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
+        style={styles.input}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
       />
       <TextInput
+        style={styles.input}
         placeholder="Password"
         value={password}
         onChangeText={setPassword}
         secureTextEntry
       />
-      <Button title="Sign Up" onPress={handleSignUp} />
+      {error ? <Text style={styles.error}>{error}</Text> : null}
       <Button title="Login" onPress={handleLogin} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 16,
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 12,
+    padding: 8,
+  },
+  error: {
+    color: 'red',
+    marginBottom: 12,
+  },
+});
 
 export default AuthScreen;

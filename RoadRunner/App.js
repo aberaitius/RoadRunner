@@ -10,8 +10,8 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Auth">
-        <Stack.Screen name="Auth" component={AuthScreen} />
-        <Stack.Screen name="Track" component={ActivityTracking} />
+        <Stack.Screen name="Auth" component={AuthScreen} options={{ title: 'Login' }} />
+        <Stack.Screen name="Track" component={ActivityTracking} options={{ title: 'Track Activity' }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
